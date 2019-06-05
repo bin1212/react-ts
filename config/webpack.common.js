@@ -18,8 +18,35 @@ const config = {
     },
     module: {
         rules:[
-            {test:/\.tsx?$/,loader:'awesome-typescript-loader'},
-            // {enforce:"pre",test:/\.js$/,loader:'source-map-loader'},
+            {test:/\.tsx?$/,exclude: /node_modules/,loader:'awesome-typescript-loader'},
+            {enforce:"pre",test:/\.js$/,loader:'source-map-loader'},
+            {test:/\.css$/,exclude: /node_modules/,use:['style-loader','css-loader']},
+            {
+                test: /\.(gif|png|jpg|jpeg|svg)$/,
+                use: [
+                  {
+                    loader: 'url-loader',
+                    options: {
+                      limit: 10000,
+                      name: 'image/[name].[hash:7].[ext]',
+                    //   publicPath:'../public',
+                    //   outputPath:'public/images'
+                    }
+                  }
+                ]
+            },
+              {
+                test: /\.(png)(\?.+)?$/,
+                include: /favicon\.png/,
+                use: [
+                  {
+                    loader: 'file-loader',
+                    options: {
+                      name: '[name].[ext]'
+                    }
+                  }
+                ]
+              }
         ]
     },
     plugins:[

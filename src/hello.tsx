@@ -1,4 +1,6 @@
 import React, {PureComponent} from 'react'
+import '../public/css/index.css'
+
 
 interface HelloProps {
     name:string;
@@ -10,7 +12,13 @@ export default class Hello extends PureComponent{
     render(){
         const {name} = this.props;
         return (
-            <div>hello {name}</div>
+            <div>
+                <p>hello {name}</p>
+                <div className='img_h'>
+
+                </div>
+                <img src={require('../public/images/logo_512.png')}/>
+            </div>
         )
     }
 }
