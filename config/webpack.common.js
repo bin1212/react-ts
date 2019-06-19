@@ -28,9 +28,9 @@ const config = {
                     loader: 'url-loader',
                     options: {
                       limit: 10000,
-                      name: 'image/[name].[hash:7].[ext]',
-                    //   publicPath:'../public',
-                    //   outputPath:'public/images'
+                      name: '[name].[ext]',
+                      // publicPath:'../public',
+                      outputPath:'public/images'
                     }
                   }
                 ]
@@ -46,7 +46,11 @@ const config = {
                     }
                   }
                 ]
-              }
+              },
+              // {
+              //   test: /\.(html|tpl)$/,
+              //   use: [ 'html-loader' ]
+              // }
         ]
     },
     plugins:[
@@ -55,7 +59,7 @@ const config = {
         // new HtmlWebpackPlugin({
         //     title: '模块热替换'
         //   }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
     ]
 }
 module.exports = config;

@@ -17,7 +17,7 @@ export default class Hello extends PureComponent{
                 <div className='img_h'>
 
                 </div>
-                <img src={require('../public/images/logo_512.png')}/>
+                <img src='/public/images/logo_512.png'/>
             </div>
         )
     }
