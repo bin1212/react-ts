@@ -2,6 +2,8 @@ const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
+const tsImportPluginFactory = require('ts-import-plugin')
+const theme = require('../theme')
 
 const htmlTemplate = new HtmlWebpackPlugin({
     template:path.resolve(__dirname,'../public/index.html'),
@@ -18,9 +20,40 @@ const config = {
     },
     module: {
         rules:[
-            {test:/\.tsx?$/,exclude: /node_modules/,loader:'awesome-typescript-loader'},
+            {
+              test:/\.ts|.tsx?$/,
+              exclude: /node_modules/,
+              use:[
+                {
+                  loader:'awesome-typescript-loader',
+                  options:{
+                    useBabel: false, 
+                    getCustomTransformers:()=>({
+                      before:[
+                        tsImportPluginFactory({
+                          libraryName:'antd',
+                          libraryDirectory:'lib',
+                          //引入antd的less
+                          style:true
+                        })
+                      ]
+                    })
+                  }
+                },
+              ]
+            },
             {enforce:"pre",test:/\.js$/,loader:'source-map-loader'},
             {test:/\.css$/,exclude: /node_modules/,use:['style-loader','css-loader']},
+            {test:/\.less$/,use:[
+              'style-loader','css-loader',
+              {
+                loader:'less-loader',
+                options:{
+                  javascriptEnabled:true,
+                  modifyVars:theme
+                }
+              }
+            ]},
             {
                 test: /\.(gif|png|jpg|jpeg|svg)$/,
                 use: [
@@ -55,10 +88,7 @@ const config = {
     },
     plugins:[
         htmlTemplate,
-        new CleanWebpackPlugin(),
-        // new HtmlWebpackPlugin({
-        //     title: '模块热替换'
-        //   }),
+        
         new webpack.HotModuleReplacementPlugin(),
     ]
 }

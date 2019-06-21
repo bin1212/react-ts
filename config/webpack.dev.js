@@ -9,7 +9,8 @@ module.exports = merge(common,{
         inline:true,
         port:9000,
         // open:true,
-        hot:true
+        hot:true,
+        historyApiFallback:true
     },
     plugins:[
         
