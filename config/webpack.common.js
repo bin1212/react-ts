@@ -7,7 +7,6 @@ const theme = require('../theme')
 
 const htmlTemplate = new HtmlWebpackPlugin({
     template:path.resolve(__dirname,'../public/index.html'),
-    title:'嘿嘿'
 })
 const config = {
     entry:path.resolve(__dirname,'../src/index.tsx'),
