@@ -1,13 +1,13 @@
 import React, {PureComponent} from 'react'
-import  '../public/css/index.css'
+import  '../public/css/index.less'
 import {Button} from 'antd'
-
-
 interface HelloProps {
-    name:string;
+    name:any;
+    age?:number;
+    [propName: string]: any;
 } 
 export interface _name{
-    name:string;
+    name:any;
 }
 export default class Hello extends PureComponent{
     constructor(public props:HelloProps){
@@ -17,7 +17,7 @@ export default class Hello extends PureComponent{
         }
     }
     componentDidMount(){
-        // console.log(this.props)
+        console.log(this.props)
         this._getName({name:'bin'});
     }
     _getName(params:_name){
@@ -35,9 +35,9 @@ export default class Hello extends PureComponent{
                 <p>hello {name}</p>
                 
                 <Button type="primary">hhh</Button>
-                {/* <div className='img_h'>
+                <div className='img_h'>
 
-                </div> */}
+                </div>
                 {/* <img src='/public/images/logo_512.png'/> */}
             </div>
         )

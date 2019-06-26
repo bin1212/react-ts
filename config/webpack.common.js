@@ -3,6 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
 const tsImportPluginFactory = require('ts-import-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const theme = require('../theme')
 
 const htmlTemplate = new HtmlWebpackPlugin({
@@ -42,17 +43,37 @@ const config = {
               ]
             },
             {enforce:"pre",test:/\.js$/,loader:'source-map-loader'},
-            {test:/\.css$/,exclude: /node_modules/,use:['style-loader','css-loader']},
-            {test:/\.less$/,use:[
+            {test:/\.css$/,
+              exclude: /node_modules/,
+              // loader:'style-loader!css-loader?modules&localIdentName=[path][name]---[local]---[hash:base64:5]'
+              use:['style-loader','css-loader']
+            },
+            {test:/\.less$/,
+              
+              use:[
               'style-loader','css-loader',
+              //是antd的模块引入失败，后续再研究配置
+              // {
+              //   loader: 'typings-for-css-modules-loader',
+              //   options: {
+              //       modules: true,
+              //       namedExport: true,
+              //       camelCase: true,
+              //       // minimize: true,
+              //       importLoaders:1,
+              //       localIdentName: "[local]_[hash:base64:5]"
+              //   }
+              // },
               {
                 loader:'less-loader',
                 options:{
                   javascriptEnabled:true,
-                  modifyVars:theme
+                  modifyVars:theme,
+                  sourceMap: true
                 }
               }
-            ]},
+            ]
+          },
             {
                 test: /\.(gif|png|jpg|jpeg|svg)$/,
                 use: [
@@ -87,8 +108,10 @@ const config = {
     },
     plugins:[
         htmlTemplate,
-        
         new webpack.HotModuleReplacementPlugin(),
+        new webpack.WatchIgnorePlugin([
+          /css\.d\.ts$/
+        ]),
     ]
 }
 module.exports = config;
