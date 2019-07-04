@@ -12,8 +12,9 @@ const htmlTemplate = new HtmlWebpackPlugin({
 const config = {
     entry:path.resolve(__dirname,'../src/index.tsx'),
     output:{
-        filename: '[name].bundle.js',
-        path:path.resolve(__dirname,'../','dist')
+        filename: '[name].bundle_[hash].js',
+        path:path.resolve(__dirname,'../','dist'),
+        // publicPath:'./dist/',
     },
     resolve:{
         extensions:['.ts','.tsx','.js','.json']
@@ -52,7 +53,7 @@ const config = {
               
               use:[
               'style-loader','css-loader',
-              //是antd的模块引入失败，后续再研究配置
+              //是antd的模块引入和css-modules结合失败，后续再研究配置
               // {
               //   loader: 'typings-for-css-modules-loader',
               //   options: {
@@ -81,15 +82,16 @@ const config = {
                     loader: 'url-loader',
                     options: {
                       limit: 10000,
-                      name: '[name].[ext]',
-                      // publicPath:'../public',
-                      outputPath:'public/images'
-                    }
+                      name: 'images/[name].[ext]',
+                      // publicPath:path.resolve(__dirname,'public'),
+                      // outputPath:'public/images'
+                    },
+                    // exclude:[path.join(__dirname, '../public/images')]
                   }
                 ]
             },
               {
-                test: /\.(png)(\?.+)?$/,
+                test: /\.(png|jpg|gif)$/,
                 include: /favicon\.png/,
                 use: [
                   {

@@ -1,5 +1,5 @@
 import React,{PureComponent} from 'react'
-import {Form, Icon, Input, Button, Checkbox} from 'antd'
+import {Form, Icon, Input, Button, Checkbox, Row, Col} from 'antd'
 import { FormComponentProps } from 'antd/lib/form';
 import './css/login.less'
 
@@ -11,33 +11,69 @@ interface UserFormProps extends FormComponentProps {
 class Login extends PureComponent<UserFormProps,any>{
     constructor(props:any){
         super(props)
+        this.submitForm = this.submitForm.bind(this)
+    }
+    submitForm(e:any){
+        e.preventDefault();
+        this.props.form.validateFields((err,values:UserFormProps) => {
+            if(!err){
+                console.log('success',values)
+            }
+        });
     }
     render(){
         const {getFieldDecorator} = this.props.form;
-        console.log(this.props)
+        // console.log(this.props.form)
+        const formItemLayout = {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 14 },
+          };
+        const buttonLayout = {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 14 },
+          }
         return(
             <div className='login_container'>
+                <div className='login_back'>
+
+                </div>
                 <div className='login_content'>
-                    <Form>
-                        <Form.Item>
-                            {getFieldDecorator('username',{
-                                rules:[{ required: true, message: '请输入账户名'}]
-                            })(
-                                <Input  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='用户名'/>
-                            )
-                            }
-                        </Form.Item>
-                        <Form.Item>
-                            {getFieldDecorator('password', {
-                                rules: [{ required: true, message: 'Please input your Password!' }],
-                            })(
-                                <Input
-                                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                type="password"
-                                placeholder="Password"
-                                />,
-                            )}
-                        </Form.Item>
+                    <Form className="login-form" {...formItemLayout} onSubmit={this.submitForm}>
+                        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                            <Col md={24} sm={24}>
+                                <Form.Item label='账户名'>
+                                {getFieldDecorator('username',{
+                                    rules:[{ required: true, message: '请输入账户名'}]
+                                })(
+                                    <Input  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder='用户名'/>
+                                )
+                                }
+                            </Form.Item>
+                            </Col>
+                        </Row>
+                       
+                        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                            <Col md={24} sm={24}>
+                                 <Form.Item label='密码'>
+                                {getFieldDecorator('password', {
+                                    rules: [{ required: true, message: 'Please input your Password!' }],
+                                })(
+                                    <Input
+                                    prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                    type="password"
+                                    placeholder="Password"
+                                    />,
+                                )}
+                            </Form.Item>
+                            </Col>
+                        </Row>
+                        <Row >
+                            <Col>
+                                <Form.Item {...buttonLayout}>
+                                    <Button type="primary" htmlType="submit">登陆</Button>
+                                </Form.Item>
+                            </Col>
+                        </Row>
                     </Form>
                 </div>
             </div>
