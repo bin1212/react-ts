@@ -11,11 +11,7 @@ const htmlTemplate = new HtmlWebpackPlugin({
 })
 const config = {
     entry:path.resolve(__dirname,'../src/index.tsx'),
-    output:{
-        filename: '[name].bundle_[hash].js',
-        path:path.resolve(__dirname,'../','dist'),
-        // publicPath:'./dist/',
-    },
+  
     resolve:{
         extensions:['.ts','.tsx','.js','.json']
     },
@@ -110,7 +106,6 @@ const config = {
     },
     plugins:[
         htmlTemplate,
-        new webpack.HotModuleReplacementPlugin(),
         new webpack.WatchIgnorePlugin([
           /css\.d\.ts$/
         ]),

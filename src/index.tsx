@@ -3,21 +3,39 @@ import ReactDom from 'react-dom'
 import {Switch, Route ,Redirect} from 'react-router'
 import { BrowserRouter,HashRouter,MemoryRouter } from 'react-router-dom'
 import {Provider} from 'react-redux'
-// import {createBrowserHistory} from 'history';
-import Login from './pages/login/login'
-import Hello from './hello'
-const HelloHelloC = function(){
-    return <Hello name={'/12'} gender={'male'}/>
-}
+// import {ConnectedRouter,routerMiddleware} from 'react-router-redux'
+import {createStore,applyMiddleware} from 'redux'
+import loadable from 'react-loadable';
+import {createBrowserHistory} from 'history'
 
-// let history = createBrowserHistory()
+import reducer from './reducer/index'
+import {Loading} from './components/common/loading'
+
+//按照路由进行代码分割
+const AsyncHome = loadable({
+    loader:  () => import('./pages/home/index'),
+    loading: Loading
+})
+const AsyncLogin = loadable({
+    loader:  () => import('./pages/login/login'),
+    loading: Loading
+})
+
+const bHistory = createBrowserHistory()
+// const middleware = routerMiddleware(bHistory)
+export const store = createStore(
+    reducer,
+)
+
 ReactDom.render(
-    <BrowserRouter>
-        <Switch>
-            <Route path='/' exact component={HelloHelloC}/>
-            <Route path='/login' component={Login}/>
-            <Redirect to="/" />
-        </Switch>
-    </BrowserRouter>,
+    <Provider store={store}>
+        <BrowserRouter>
+            <Switch>
+                <Route path='/' exact component={AsyncHome}/>
+                <Route path='/login' component={AsyncLogin}/>
+                <Redirect to="/" />
+            </Switch>
+        </BrowserRouter>
+    </Provider>,
     document.getElementById('app')
     )

@@ -1,0 +1,26 @@
+.contentBody{
+    height: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+.edit_content{
+    outline: none;
+    padding: 0 20px;
+    user-select: text;
+    line-height: 24px;
+}
+.content_wrapper{
+    position: relative;
+}
+.bullet_wrapper{
+    position: absolute;
+    left: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    cursor: pointer;
+    .dot{
+        border: 3px solid #666;
+        border-radius: 3px;
+    }
+}

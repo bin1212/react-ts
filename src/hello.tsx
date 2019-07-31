@@ -33,12 +33,12 @@ export default class Hello extends PureComponent{
         return (
             <div>
                 <p>hello {name}</p>
-                
-                <Button type="primary">hhh</Button>
+                <p>性感斌仔，在线发牌</p>
+                {/* <Button type="primary">hhh</Button>
                 <div className='img_h'>
 
                 </div>
-                <img src='./public/images/logo_512.png'/>
+                <img src='./public/images/logo_512.png'/> */}
             </div>
         )
     }

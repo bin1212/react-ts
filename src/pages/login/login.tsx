@@ -8,7 +8,7 @@ interface UserFormProps extends FormComponentProps {
     password:string
   }
   
-class Login extends PureComponent<UserFormProps,any>{
+class Login extends PureComponent<UserFormProps>{
     constructor(props:any){
         super(props)
         this.submitForm = this.submitForm.bind(this)
