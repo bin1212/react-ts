@@ -3,10 +3,10 @@ import ReactDom from 'react-dom'
 import {Switch, Route ,Redirect} from 'react-router'
 import { BrowserRouter,HashRouter,MemoryRouter } from 'react-router-dom'
 import {Provider} from 'react-redux'
-// import {ConnectedRouter,routerMiddleware} from 'react-router-redux'
+import {ConnectedRouter,routerMiddleware} from 'connected-react-router'
 import {createStore,applyMiddleware} from 'redux'
 import loadable from 'react-loadable';
-import {createBrowserHistory} from 'history'
+import history from './commonFnc/history'
 
 import reducer from './reducer/index'
 import {Loading} from './components/common/loading'
@@ -21,21 +21,21 @@ const AsyncLogin = loadable({
     loading: Loading
 })
 
-const bHistory = createBrowserHistory()
-// const middleware = routerMiddleware(bHistory)
+const middleware = routerMiddleware(history)
 export const store = createStore(
     reducer,
+    applyMiddleware(middleware)
 )
 
 ReactDom.render(
     <Provider store={store}>
-        <BrowserRouter>
+        <ConnectedRouter history={history}>
             <Switch>
                 <Route path='/' exact component={AsyncHome}/>
                 <Route path='/login' component={AsyncLogin}/>
                 <Redirect to="/" />
             </Switch>
-        </BrowserRouter>
+        </ConnectedRouter>
     </Provider>,
     document.getElementById('app')
     )

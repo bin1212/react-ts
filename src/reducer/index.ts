@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux'
 import {connectRouter} from 'connected-react-router'
 import history from '../commonFnc/history'
-import initTestUser from './test'
+import initUser from './test'
 
 const rootReducer = combineReducers({
-    initTestUser,routing:connectRouter(history)
+    initUser,router:connectRouter(history)
 })
 export default rootReducer

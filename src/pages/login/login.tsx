@@ -2,6 +2,11 @@ import React,{PureComponent} from 'react'
 import {Form, Icon, Input, Button, Checkbox, Row, Col} from 'antd'
 import { FormComponentProps } from 'antd/lib/form';
 import './css/login.less'
+import {connect} from 'react-redux'
+import {bindActionCreators,Dispatch} from 'redux'
+import {store} from '../../index'
+import * as TodoAction from '../../actions'
+import {storeType,initUser} from '../../reducer/types'
 
 interface UserFormProps extends FormComponentProps {
     username:string,
@@ -23,7 +28,6 @@ class Login extends PureComponent<UserFormProps>{
     }
     render(){
         const {getFieldDecorator} = this.props.form;
-        // console.log(this.props.form)
         const formItemLayout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 14 },
@@ -80,5 +84,19 @@ class Login extends PureComponent<UserFormProps>{
         )
     }
 }
+function mapStateToProps (state:storeType) {
+    const {initUser} = state
+    return {initUser}
+    // return 
+}
+function mapDispatchProps (dispatch:Dispatch):any {
+    return{
+        actions:bindActionCreators(TodoAction,dispatch)
+    }
+}
 const WrapLogin = Form.create<UserFormProps>()(Login)
-export default WrapLogin
+
+export default connect(
+    mapStateToProps,
+    mapDispatchProps
+)(WrapLogin)

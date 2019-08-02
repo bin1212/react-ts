@@ -4,39 +4,41 @@ import {bindActionCreators,Dispatch} from 'redux'
 import './css/home.less'
 import {store} from '../../index'
 import * as TodoAction from '../../actions'
-import {storeType,initTestUser} from '../../reducer/types'
+import {storeType,initUser} from '../../reducer/types'
+import {goto} from '../../commonFnc/history'
+
 interface Iprops{
-    goto?:any,
     history:any,
-    test:any,
     actions:{
         goto:any,
-        test:any
+        initFnc:any
     },
-    id:string,
+    initUser:initUser,
+    initFnc:any,
     name:string
 }
+interface IState{
+    // a:string
+}
 
-class Home extends PureComponent<Iprops>{
+class Home extends PureComponent<Iprops,IState>{
     constructor(props:Iprops){
         super(props)
+        this.state={
+        }
+        this.dispatchFnu = this.dispatchFnu.bind(this)
     }
     componentDidMount(){
-        // store.dispatch({
-        //     type:'goto',
-        //     name
-        // })
-        // console.log(this.props)
-        // const {goto} = this.props
-        this.props.actions.test({
+
+    }
+    dispatchFnu():void{
+        this.props.actions.initFnc({
             id:'123',
             name:'123'
         })
-        // goto()
-        // this.props.history.push('/login')
+        goto('/login')
     }
     render(){
-        console.log(this.props)
         return(
             <div className='contentBody'>
                 <div className='content_wrapper'>
@@ -51,15 +53,11 @@ class Home extends PureComponent<Iprops>{
         )
     }
 }
-function mapStateToProps (state:storeType):any {
-    // const {initTestUser} = state
-    console.log(state.initTestUser)
-    return state.initTestUser
+function mapStateToProps (state:storeType) {
+    const {initUser} = state
+    return {initUser}
     // return 
 }
-// ({
-//     initTestUser:state.initTestState,
-// })
 function mapDispatchProps (dispatch:Dispatch):any {
     return{
         actions:bindActionCreators(TodoAction,dispatch)

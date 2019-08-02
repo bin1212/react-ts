@@ -1,8 +1,8 @@
 export interface storeType {
-    initTestUser:initTestUser,
+    initUser:initUser,
     IAction:IAction
 }
-export interface initTestUser {
+export interface initUser {
     id:string,
     name:string 
 }
