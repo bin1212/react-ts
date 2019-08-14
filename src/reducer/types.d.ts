@@ -1,6 +1,7 @@
 export interface storeType {
     initUser:initUser,
-    IAction:IAction
+    IAction:IAction,
+    editData:any
 }
 export interface initUser {
     id:string,

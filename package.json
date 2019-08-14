@@ -44,8 +44,10 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "@types/draft-js": "^0.10.34",
     "@types/react-router-dom": "^4.3.4",
     "antd": "^3.19.5",
+    "draft-js": "^0.11.0",
     "react": "^16.8.6",
     "react-redux": "^7.1.0",
     "react-router": "^5.0.1",

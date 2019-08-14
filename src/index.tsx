@@ -20,6 +20,11 @@ const AsyncLogin = loadable({
     loader:  () => import('./pages/login/login'),
     loading: Loading
 })
+const AsyncTest = loadable({
+    loader:  () => import('./pages/test/test'),
+    loading: Loading
+})
+
 
 const middleware = routerMiddleware(history)
 export const store = createStore(
@@ -33,6 +38,7 @@ ReactDom.render(
             <Switch>
                 <Route path='/' exact component={AsyncHome}/>
                 <Route path='/login' component={AsyncLogin}/>
+                <Route path='/edit' component={AsyncTest}/>
                 <Redirect to="/" />
             </Switch>
         </ConnectedRouter>
