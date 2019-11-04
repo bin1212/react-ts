@@ -6,10 +6,10 @@ const initData: initUser ={
     name:''
 }
 export default function initFunc(state = initData,action:IAction):initUser{
-    const {type, payload} = action
+    const {type, data} = action
     switch (type){
         case TEST.TEST:
-            return Object.assign({},state,payload);
+            return Object.assign({},state,data);
         default:
             return {...state}
     }

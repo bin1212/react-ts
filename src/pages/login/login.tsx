@@ -1,33 +1,84 @@
 import React,{PureComponent} from 'react'
-import {Form, Icon, Input, Button, Checkbox, Row, Col} from 'antd'
+import {Form, Icon, Input, Button, Checkbox, Row, Col, message} from 'antd'
 import { FormComponentProps } from 'antd/lib/form';
+// import axios from 'axios'
 import './css/login.less'
 import {connect} from 'react-redux'
 import {bindActionCreators,Dispatch} from 'redux'
 import {store} from '../../index'
+import {goto} from '../../commonFnc/history'
 import * as TodoAction from '../../actions'
 import {storeType,initUser} from '../../reducer/types'
+import request from '../../commonFnc/request'
 
 interface UserFormProps extends FormComponentProps {
     username:string,
     password:string
   }
-  
-class Login extends PureComponent<UserFormProps>{
+interface Istate{
+    isLogin:boolean
+}
+
+class Login extends PureComponent<UserFormProps,Istate>{
     constructor(props:any){
         super(props)
+        this.state={
+            isLogin:true
+        }
         this.submitForm = this.submitForm.bind(this)
+        this.goRegister = this.goRegister.bind(this)
+        this.login = this.login.bind(this)
+        this.register = this.register.bind(this)
     }
     submitForm(e:any){
+        const {isLogin} = this.state
         e.preventDefault();
         this.props.form.validateFields((err,values:UserFormProps) => {
             if(!err){
-                console.log('success',values)
+                if(isLogin){
+                    this.login(values)
+                }else{
+                    this.register(values)
+                }
+                
             }
         });
     }
+    goRegister():void{
+        const {isLogin} = this.state
+        this.setState({
+            isLogin:!isLogin
+        })
+    }
+    login(values:UserFormProps){
+        request({url:'/api/login',method:'POST',data:values})
+            .then(res=>{
+                // console.log(res)
+                if(res.data.resultCode == '200'){
+                    message.success('登陆成功', 10);
+                    goto('/')
+                }else{
+                    message.error(res.data.detailDescription, 1);
+                }
+            })
+    }
+    register(values:UserFormProps){
+        request({url:'/api/register',method:'POST',data:values})
+                    .then(res=>{
+                        // console.log(res)
+                        if(res.data.resultCode == '200'){
+                            message.success('注册成功', 10);
+                            this.setState({
+                                isLogin:true
+                            })
+                        }else{
+                            message.success(res.data.detailDescription, 1);
+                        }
+                    })
+    }
     render(){
         const {getFieldDecorator} = this.props.form;
+        const {isLogin} = this.state
         const formItemLayout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 14 },
@@ -60,7 +111,7 @@ class Login extends PureComponent<UserFormProps>{
                             <Col md={24} sm={24}>
                                  <Form.Item label='密码'>
                                 {getFieldDecorator('password', {
-                                    rules: [{ required: true, message: 'Please input your Password!' }],
+                                    rules: [{ required: true, message: '请输入密码' }],
                                 })(
                                     <Input
                                     prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -68,13 +119,17 @@ class Login extends PureComponent<UserFormProps>{
                                     placeholder="Password"
                                     />,
                                 )}
+                                <span className='goGegister' onClick={this.goRegister}>
+                                    
+                                    {isLogin ? '没有账号？去注册' : '已有账号？去登陆'}
+                                </span>
                             </Form.Item>
                             </Col>
                         </Row>
                         <Row >
                             <Col>
                                 <Form.Item {...buttonLayout}>
-                                    <Button type="primary" htmlType="submit">登陆</Button>
+                                    <Button type="primary" htmlType="submit">{isLogin ? '登陆' : '注册'}</Button>
                                 </Form.Item>
                             </Col>
                         </Row>

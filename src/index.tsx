@@ -6,10 +6,12 @@ import {Provider} from 'react-redux'
 import {ConnectedRouter,routerMiddleware} from 'connected-react-router'
 import {createStore,applyMiddleware} from 'redux'
 import loadable from 'react-loadable';
+import createSagaMiddleware from 'redux-saga'
 import history from './commonFnc/history'
 
 import reducer from './reducer/index'
 import {Loading} from './components/common/loading'
+import rootSaga from './sagas/index'
 
 //按照路由进行代码分割
 const AsyncHome = loadable({
@@ -27,11 +29,12 @@ const AsyncTest = loadable({
 
 
 const middleware = routerMiddleware(history)
+const sagaMiddleware = createSagaMiddleware()
 export const store = createStore(
     reducer,
-    applyMiddleware(middleware)
+    applyMiddleware(middleware,sagaMiddleware)
 )
-
+sagaMiddleware.run(rootSaga)
 ReactDom.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>

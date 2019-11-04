@@ -1,40 +1,23 @@
 import {CONTENT_MSG} from '../constants/actionType'
-import {IAction} from './types'
+import {IAction,deepData} from './types'
 // interface I
-const initData:any = [
+const initData:deepData[] = [
     {
         id:'1',
-        content:'111',
-        children:[
-            {
-                id:'11',
-                content:'aaa',
-                children: []
-            }
-        ]
+        content:'',
+        children:[]
     },
     {
         id:'2',
-        content:'222',
-        children:[
-            {
-                id:'21',
-                content:'bbb',
-                children: []
-            },
-            {
-                id:'22',
-                content:'bbb',
-                children: []
-            }
-        ]
+        content:'',
+        children:[]
     }
 ]
 export default function editData(state = initData,action:IAction){
-    const {type, payload} = action
+    const {type, data} = action
     switch (type) {
         case CONTENT_MSG:
-            return payload;
+            return data;
         default:
             return [...state]
     }
