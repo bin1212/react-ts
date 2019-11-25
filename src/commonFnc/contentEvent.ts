@@ -18,8 +18,6 @@ class ContentEvent{
         const that = this
         mapData.some(function (mapArr:content, index:number, _ary:any):any{
             if(_ary.find((item:content)=>item.id === id)){
-                // if(cb) cb(_ary.find((item:content)=>item.id === id))
-                console.log(_ary)
                 if(typeof cb == 'function') cb(_ary)
                 return true
             }else if(mapArr.children && mapArr.children.length){
