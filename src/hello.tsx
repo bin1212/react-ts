@@ -17,7 +17,7 @@ export default class Hello extends PureComponent{
         }
     }
     componentDidMount(){
-        console.log(this.props)
+        console.log(this.props);
         this._getName({name:'bin'});
     }
     _getName(params:_name){
