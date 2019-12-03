@@ -2,10 +2,12 @@
 
 import React, {PureComponent,Component} from 'react'
 import {storeType,initUser,deepData} from '../../reducer/types'
+import './css/contentEdit.less'
 
 interface editProps{
     initData:deepData[],
-    editFnc:Function
+    editFnc:Function,
+    refreshRender:Function
 }
 interface content{
     id:string,
@@ -18,6 +20,7 @@ class ContentEdit extends Component<editProps>{
         this.keyDownEvent = this.keyDownEvent.bind(this)
         this.chineseKey = this.chineseKey.bind(this)
         this.rotKeyTest = this.rotKeyTest.bind(this)
+        this.blurEvent = this.blurEvent.bind(this)
     }
     public keyDownEvent(id:string,e:React.KeyboardEvent<HTMLDivElement>):any{
         const {initData, editFnc} = this.props;
@@ -29,6 +32,9 @@ class ContentEdit extends Component<editProps>{
     public rotKeyTest(keyName:any, e:any, handle:any){
         console.log(keyName,e,handle)
     }
+    public blurEvent(){
+        this.props.refreshRender()
+    }
     // static getDerivedStateFromProps(nextProps:editProps, prevState:any){
     //     console.log(nextProps)
     // }
@@ -39,7 +45,7 @@ class ContentEdit extends Component<editProps>{
 
     // }
     render(){
-        const {initData, editFnc} = this.props
+        const {initData, editFnc, refreshRender} = this.props
         // console.log(initData)
         return (
             <React.Fragment>
@@ -58,6 +64,7 @@ class ContentEdit extends Component<editProps>{
                                     onKeyUp = {this.keyDownEvent.bind(this,item.id)}
                                     onKeyDown = {this.keyDownEvent.bind(this,item.id)}
                                     id={item.id}
+                                    onBlur={this.blurEvent}
                                     // compositionStart={this.chineseKey}
                                     >
                                 </div>
@@ -65,7 +72,7 @@ class ContentEdit extends Component<editProps>{
                                 {
                                     item.children && item.children.length ?
                                     <div className='children_content'>
-                                        <ContentEdit initData={item.children} editFnc={editFnc}/>
+                                        <ContentEdit initData={item.children} editFnc={editFnc} refreshRender={refreshRender}/>
                                     </div>:null
                                 }
                             </div>

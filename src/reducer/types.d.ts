@@ -1,7 +1,7 @@
 export interface storeType {
     initUser:initUser,
     IAction:IAction,
-    editData:deepData[]
+    editData:contentTyps
 }
 export interface initUser {
     id:string,
@@ -9,10 +9,14 @@ export interface initUser {
 }
 export interface IAction {
     type:String,
-    data:deepData[]
+    data:contentTyps
 }
 export interface deepData {
     id:string,
     content:string,
     children:deepData[]
+}
+export interface contentTyps {
+    title:string
+    contentDetail:deepData[]
 }

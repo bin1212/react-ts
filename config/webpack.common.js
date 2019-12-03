@@ -1,6 +1,7 @@
 const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack')
 const tsImportPluginFactory = require('ts-import-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
@@ -19,7 +20,11 @@ const htmlTemplate = new HtmlWebpackPlugin({
 })
 const config = {
     entry:path.resolve(__dirname,'../src/index.tsx'),
-  
+    // output:{
+    //   filename: '[name].bundle.js',
+    //   path:path.resolve(__dirname,'../','dist'),
+    //   publicPath:'/',
+    // },
     resolve:{
         extensions:['.ts','.tsx','.js','.json']
     },
@@ -117,6 +122,9 @@ const config = {
         new webpack.WatchIgnorePlugin([
           /css\.d\.ts$/
         ]),
+        new CopyWebpackPlugin([
+          {from:path.resolve(__dirname,'../public/images'),to:path.resolve(__dirname,'../dist/public/images')}
+        ])
     ]
 }
 module.exports = config;

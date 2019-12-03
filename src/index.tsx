@@ -12,6 +12,7 @@ import history from './commonFnc/history'
 import reducer from './reducer/index'
 import {Loading} from './components/common/loading'
 import rootSaga from './sagas/index'
+import './assets/css/base.less'
 
 //按照路由进行代码分割
 const AsyncHome = loadable({

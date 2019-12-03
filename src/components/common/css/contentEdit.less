@@ -1,0 +1,24 @@
+.edit_content{
+    outline: none;
+    padding: 0 20px;
+    user-select: text;
+    line-height: 24px;
+}
+.content_wrapper{
+    position: relative;
+}
+.bullet_wrapper{
+    position: absolute;
+    left: 3px;
+    top: 12px;
+    // transform: translateY(-50%);
+    z-index: 2;
+    cursor: pointer;
+    .dot{
+        border: 3px solid #666;
+        border-radius: 3px;
+    }
+}
+.children_content{
+    padding-left: 14px;
+}

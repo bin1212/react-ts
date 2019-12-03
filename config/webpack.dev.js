@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack')
 const merge = require('webpack-merge');
 const common = require('./webpack.common');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = merge(common,{
     output:{
         filename: '[name].bundle.js',
@@ -20,5 +21,8 @@ module.exports = merge(common,{
     },
     plugins:[
         new webpack.HotModuleReplacementPlugin(),
+        // new CopyWebpackPlugin([
+        //     {from:path.resolve(__dirname,'../public/images'),to:path.resolve(__dirname,'./images')}
+        //   ])
     ]
 })
