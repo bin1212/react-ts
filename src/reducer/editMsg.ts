@@ -15,6 +15,7 @@ export default function editData(state = initData,action:IAction){
     const {type, data} = action
     switch (type) {
         case CONTENT_MSG:
+            console.log(data)
             return data
         // case CHANGE_TITLE:
         //     return {

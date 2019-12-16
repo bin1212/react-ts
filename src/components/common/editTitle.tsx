@@ -11,7 +11,8 @@ class EditTitle extends PureComponent<IProps>{
     public debbounceChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
         const {value} = event.target
         const {onChange} = this.props
-        Debounce.setTimer(()=>{onChange(value)},500)
+        onChange(value)
+        // Debounce.setTimer(()=>{onChange(value)},100)
     }
     render(){
         const {title} = this.props

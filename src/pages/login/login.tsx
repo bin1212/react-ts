@@ -1,7 +1,6 @@
 import React,{PureComponent} from 'react'
 import {Form, Icon, Input, Button, Checkbox, Row, Col, message} from 'antd'
 import { FormComponentProps } from 'antd/lib/form';
-// import axios from 'axios'
 import './css/login.less'
 import {connect} from 'react-redux'
 import {bindActionCreators,Dispatch} from 'redux'
@@ -10,6 +9,7 @@ import {goto} from '../../commonFnc/history'
 import * as TodoAction from '../../actions'
 import {storeType,initUser} from '../../reducer/types'
 import request from '../../commonFnc/request'
+import AuthProvider from '../../commonFnc/AuthProvider'
 
 interface UserFormProps extends FormComponentProps {
     username:string,
@@ -51,30 +51,31 @@ class Login extends PureComponent<UserFormProps,Istate>{
         })
     }
     login(values:UserFormProps){
-        request({url:'/api/login',method:'POST',data:values})
-            .then(res=>{
-                // console.log(res)
-                if(res.data.resultCode == '200'){
-                    message.success('登陆成功', 10);
+        request({url:'/api/auth/login',method:'POST',data:values})
+            .then((res:any)=>{
+                console.log(res)
+                if(res.resultCode == '200'){
+                    message.success('登陆成功', 1);
+                    AuthProvider.onLogin({token:res.resultContent.access_token,tokenExpireTime:res.resultContent.expiresIn})
                     goto('/')
                 }else{
-                    message.error(res.data.detailDescription, 1);
+                    message.error(res.detailDescription, 1);
                 }
             })
     }
     register(values:UserFormProps){
-        request({url:'/api/register',method:'POST',data:values})
-                    .then(res=>{
-                        // console.log(res)
-                        if(res.data.resultCode == '200'){
-                            message.success('注册成功', 10);
-                            this.setState({
-                                isLogin:true
-                            })
-                        }else{
-                            message.success(res.data.detailDescription, 1);
-                        }
+        request({url:'/api/auth/register',method:'POST',data:values})
+            .then((res:any)=>{
+                // console.log(res)
+                if(res.resultCode == '200'){
+                    message.success('注册成功', 1);
+                    this.setState({
+                        isLogin:true
                     })
+                }else{
+                    message.success(res.detailDescription, 1);
+                }
+            })
     }
     render(){
         const {getFieldDecorator} = this.props.form;

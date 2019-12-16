@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators,Dispatch} from 'redux'
+import { Icon,message } from 'antd';
 import './css/home.less'
 import {store} from '../../index'
 import * as TodoAction from '../../actions'
@@ -8,9 +9,9 @@ import {storeType,initUser,deepData,contentTyps} from '../../reducer/types'
 import {goto} from '../../commonFnc/history'
 import ContentEdit from '../../components/common/contentEdit'
 import ContentEvent from '../../commonFnc/contentEvent'
-import Debounce from '../../commonFnc/debounce'
 import PageHead from '../../components/common/editHead'
 import EditTitle from '../../components/common/editTitle'
+import request from '../../commonFnc/request'
 
 interface Iprops{
     history:any,
@@ -18,7 +19,9 @@ interface Iprops{
         goto:Function,
         initFnc:Function,
         editContent:Function,
-        editContentAsync:Function
+        editContentAsync:Function,
+        requestUserMsg:Function,
+        saveUserMsg:Function
     },
     initUser:initUser,
     name:string,
@@ -43,9 +46,12 @@ class Home extends PureComponent<Iprops,State>{
         super(props)
         this.dispatchFnu = this.dispatchFnu.bind(this)
         this.editFnc = this.editFnc.bind(this)
+        this.getUserMsg = this.getUserMsg.bind(this)
     }
     componentDidMount(){
         // this.dispatchFnu()
+        // request({url:'/users',method:'GET'})
+        this.getUserMsg()
     }
     dispatchFnu():void{
         this.props.actions.initFnc({
@@ -54,7 +60,11 @@ class Home extends PureComponent<Iprops,State>{
         })
         goto('/login')
     }
-
+    getUserMsg(){
+        this.props.actions.requestUserMsg({callBack:()=>{
+            
+        }})
+    }
     editFnc(e:React.KeyboardEvent<HTMLDivElement>,id:string){
         const {editData,actions} = this.props
         const {contentDetail} =editData
@@ -160,11 +170,29 @@ class Home extends PureComponent<Iprops,State>{
         editData.title = value
         actions.editContentAsync({data:editData})
     }
+    saveContent = ()=>{
+        const {actions} = this.props
+        actions.saveUserMsg({callBack:(res:any)=>{
+            if(res.resultCode == 200){
+                message.success('This is a success message');
+            }else{
+                message.success(res.detailDescription);
+            }
+           
+        }})
+    }
     render(){
         const {editData:{contentDetail,title},actions:{editContent}} = this.props
         return(
             <div className='contentContainer'>
-                <PageHead/>
+                <PageHead>
+                    <div className='title_component'>
+                        <div className='icon_save' onClick={this.saveContent}>
+                            <Icon type="save"/>
+                            <span>保存</span>
+                        </div>
+                    </div>
+                </PageHead>
                 <div className='scrollContent'>
                     <div className='contentBody'>
                         <EditTitle onChange = {this.titleChange} title = {title}/>
@@ -175,7 +203,6 @@ class Home extends PureComponent<Iprops,State>{
                         />
                     </div>
                 </div>
-                 
             </div>
            
         )

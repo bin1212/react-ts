@@ -1,5 +1,5 @@
 import { put, takeEvery, all } from 'redux-saga/effects'
-import watchChangeContent from './contentEditSaga'
+import {watchChangeContent,watchRequestUserMsg,watchSaveContent} from './contentEditSaga'
 
 export function* helloSaga():any{
     console.log('hello')
@@ -8,6 +8,8 @@ export function* helloSaga():any{
 export default function* rootSaga():any{
     yield all([
         helloSaga(),
-        watchChangeContent()
+        watchChangeContent(),
+        watchRequestUserMsg(),
+        watchSaveContent()
     ])
 }

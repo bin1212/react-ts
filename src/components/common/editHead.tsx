@@ -4,7 +4,9 @@ import './css/editHead.less'
 class EditHead extends PureComponent{
     render(){
         return (
-            <div className='contentHeader'></div>
+            <div className='contentHeader'>
+                {this.props.children}
+            </div>
         )
     }
 }
