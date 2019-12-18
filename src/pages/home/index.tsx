@@ -11,6 +11,7 @@ import ContentEdit from '../../components/common/contentEdit'
 import ContentEvent from '../../commonFnc/contentEvent'
 import PageHead from '../../components/common/editHead'
 import EditTitle from '../../components/common/editTitle'
+import AccountOperation from '../../components/common/accountOperation'
 import request from '../../commonFnc/request'
 
 interface Iprops{
@@ -190,6 +191,9 @@ class Home extends PureComponent<Iprops,State>{
                         <div className='icon_save' onClick={this.saveContent}>
                             <Icon type="save"/>
                             <span>保存</span>
+                        </div>
+                        <div className='user_com'>
+                           <AccountOperation/> 
                         </div>
                     </div>
                 </PageHead>

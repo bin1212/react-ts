@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie';
 import {goto} from './history'
+import {message,notification} from 'antd';
 
 type TypeMethod = "get" | "post" | "put" | "delete"
 
@@ -29,6 +30,11 @@ instance.interceptors.response.use(
             if (response.status === 401) {
                 // console.log(111)
                 console.warn('no auth')
+                notification.error({
+                    message: 'no auth',
+                    description:
+                      'token失效，请重新登录',
+                  });
                 goto('/login')
             }
             return Promise.reject('error');
@@ -39,11 +45,28 @@ instance.interceptors.response.use(
     (error: any) => {
         // 异常处理
         const res = error.response
+        console.log(error.response)
         if (res.status === 401) {
             console.warn('no auth')
+            notification.error({
+                message: 'no auth',
+                description:
+                  'token失效，请重新登录',
+              });
             goto('/login')
+        }else if(res.status === 500){
+            notification.error({
+                message: 'error',
+                description:'internet error',
+            });
+        }else{
+            notification.error({
+                message: 'error',
+                description:error.response.data+',Something wrong here',
+            });
         }
         console.log(error)
+        
         return Promise.reject(error);
     },
 );

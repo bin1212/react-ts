@@ -12,8 +12,8 @@ import request from '../../commonFnc/request'
 import AuthProvider from '../../commonFnc/AuthProvider'
 
 interface UserFormProps extends FormComponentProps {
-    username:string,
-    password:string
+    // username:string,
+    // password:string
   }
 interface Istate{
     isLogin:boolean
