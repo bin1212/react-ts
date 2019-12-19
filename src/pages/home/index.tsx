@@ -190,7 +190,7 @@ class Home extends PureComponent<Iprops,State>{
                     <div className='title_component'>
                         <div className='icon_save' onClick={this.saveContent}>
                             <Icon type="save"/>
-                            <span>保存</span>
+                            <span>保存</span> 
                         </div>
                         <div className='user_com'>
                            <AccountOperation/> 

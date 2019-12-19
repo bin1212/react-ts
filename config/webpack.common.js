@@ -62,18 +62,6 @@ const config = {
               
               use:[
               'style-loader','css-loader',
-              //是antd的模块引入和css-modules结合失败，后续再研究配置
-              // {
-              //   loader: 'typings-for-css-modules-loader',
-              //   options: {
-              //       modules: true,
-              //       namedExport: true,
-              //       camelCase: true,
-              //       // minimize: true,
-              //       importLoaders:1,
-              //       localIdentName: "[local]_[hash:base64:5]"
-              //   }
-              // },
               {
                 loader:'less-loader',
                 options:{
@@ -90,7 +78,7 @@ const config = {
                   {
                     loader: 'url-loader',
                     options: {
-                      limit: 10000,
+                      limit: 1000,
                       name: 'images/[name].[ext]',
                       // publicPath:path.resolve(__dirname,'public'),
                       // outputPath:'public/images'
@@ -124,7 +112,10 @@ const config = {
         ]),
         new CopyWebpackPlugin([
           {from:path.resolve(__dirname,'../public/images'),to:path.resolve(__dirname,'../dist/public/images')}
-        ])
+        ]),
+        // new webpack.DllReferencePlugin({
+        //   manifest: path.resolve(__dirname, '../dist/dll', 'mainfist.json')
+        // }),
     ]
 }
 module.exports = config;
