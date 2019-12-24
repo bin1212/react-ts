@@ -12,9 +12,14 @@ import history from './commonFnc/history'
 import reducer from './reducer/index'
 import {Loading} from './components/common/loading'
 import rootSaga from './sagas/index'
+import index from './pages/index/index'
 import './assets/css/base.less'
 
 //按照路由进行代码分割
+const AsyncIndex = loadable({
+    loader:  () => import('./pages/index/index'),
+    loading: Loading
+})
 const AsyncHome = loadable({
     loader:  () => import('./pages/home/index'),
     loading: Loading
@@ -29,6 +34,8 @@ const AsyncTest = loadable({
 })
 
 
+
+
 const middleware = routerMiddleware(history)
 const sagaMiddleware = createSagaMiddleware()
 export const store = createStore(
@@ -41,8 +48,9 @@ ReactDom.render(
         <ConnectedRouter history={history}>
             <Switch>
                 <Route path='/' exact component={AsyncHome}/>
+                <Route path='/index' exact component={index}/>
                 <Route path='/login' component={AsyncLogin}/>
-                <Route path='/edit' component={AsyncTest}/>
+                <Route path='/test' component={AsyncTest}/>
                 <Redirect to="/" />
             </Switch>
         </ConnectedRouter>

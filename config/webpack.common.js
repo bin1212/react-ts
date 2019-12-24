@@ -78,30 +78,43 @@ const config = {
                   {
                     loader: 'url-loader',
                     options: {
-                      limit: 1000,
+                      limit: 100,
                       name: 'images/[name].[ext]',
                       // publicPath:path.resolve(__dirname,'public'),
-                      // outputPath:'public/images'
+                      // outputPath:'images'
                     },
                     // exclude:[path.join(__dirname, '../public/images')]
                   }
                 ]
             },
               {
-                test: /\.(png|jpg|gif)$/,
+                test: /\.(png|jpg|gif|webp)$/,
                 include: /favicon\.png/,
                 use: [
                   {
                     loader: 'file-loader',
                     options: {
-                      name: '[name].[ext]'
+                      name: '[name].[ext]',
+                      // publicPath:'./src'
+                      // outputPath:'assets/images/' 
                     }
-                  }
+                  },
+                  {
+                    loader:'html-loader',
+                    options:{
+                        attrs:['img:src','img:data-src']
+                    }
+                }
                 ]
               },
               // {
-              //   test: /\.(html|tpl)$/,
-              //   use: [ 'html-loader' ]
+              //   test: /\.html$/,
+              //   use: {
+              //     loader: 'html-loader',
+              //     // options: {
+              //     //     attrs: ['img:src', 'img:data-src']
+              //     // }
+              //   }
               // }
         ]
     },
