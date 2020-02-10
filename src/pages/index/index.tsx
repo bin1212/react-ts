@@ -7,10 +7,12 @@ class Index extends PureComponent{
         // this.panoramaDraw()
         
         const panorama = document.getElementById('panorama') as HTMLCanvasElement;
+        panorama.width  = document.body.clientWidth
+        panorama.height  = document.body.clientHeight
         let wave = new Wave({
             canvas:panorama,
         })
-        wave.start()
+        // wave.start()
     }
     render(){
         return(

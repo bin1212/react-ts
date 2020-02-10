@@ -8,3 +8,8 @@ export const saveUserMsg = (data:any):any=>{return request({url:'/api/userMsg/co
 
 export const change_password = (data:any):any=>{return request({url:'/api/userMsg/user/change_password',method:'PUT',data})}
 export const logout = ():any=>{return request({url:'/api/auth/logout',method:'PUT'})}
+
+export const getUserinfo = ():any=>{return request({url:'/api/userMsg/user/userinfo',method:'GET'})}
+
+
+

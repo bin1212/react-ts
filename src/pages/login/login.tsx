@@ -53,11 +53,15 @@ class Login extends PureComponent<UserFormProps,Istate>{
     login(values:UserFormProps){
         request({url:'/api/auth/login',method:'POST',data:values})
             .then((res:any)=>{
-                console.log(res)
+                // console.log(res)
                 if(res.resultCode == '200'){
                     message.success('登陆成功', 1);
                     AuthProvider.onLogin({token:res.resultContent.access_token,tokenExpireTime:res.resultContent.expiresIn})
-                    goto('/')
+                    if(res.resultContent.loginNum){
+                        goto('/')
+                    }else{
+                        goto('/index')
+                    }
                 }else{
                     message.error(res.detailDescription, 1);
                 }

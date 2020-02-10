@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react'
 import {connect} from 'react-redux'
 import {bindActionCreators,Dispatch} from 'redux'
+import {withRouter,RouteComponentProps} from 'react-router-dom'
 import { Icon,message } from 'antd';
 import './css/home.less'
 import {store} from '../../index'
@@ -25,13 +26,13 @@ interface Iprops{
         saveUserMsg:Function
     },
     initUser:initUser,
-    name:string,
     editData:contentTyps
 }
 const initState = {
     isShiftDown:false
 }
 type State = Readonly<typeof initState>
+type thisProps = Iprops & RouteComponentProps;
 interface IState{
     isShiftDown:boolean
 }
@@ -41,9 +42,9 @@ interface content{
     children:deepData[]
 }
 
-class Home extends PureComponent<Iprops,State>{
+class Home extends PureComponent<thisProps,State>{
     readonly state:State=initState
-    constructor(props:Iprops,state:State){
+    constructor(props:thisProps,state:State){
         super(props)
         this.dispatchFnu = this.dispatchFnu.bind(this)
         this.editFnc = this.editFnc.bind(this)
@@ -152,13 +153,38 @@ class Home extends PureComponent<Iprops,State>{
             e.preventDefault()
             return false
         }
+ 
         //键盘抬起事件
         if(e.type === 'keyup' && key!='Shift'){
             // console.log('keyup',key)
             //找到对应的content，由于浅拷贝原因，store实际值已经改变，这时候不需要去重新渲染，在失去焦点的时候，避免光标问题
-            ContentEvent.reduceData(contentDetail,function(findArr:any){
-                findArr.find((item:content)=>item.id === id).content = value
-            },id)
+            if(key === 'Backspace'){
+                console.log('delete')
+                ContentEvent.reduceData(contentDetail,function(findArr:any){
+                    if(findArr.find((item:content)=>item.id === id).content){
+                        findArr.find((item:content)=>item.id === id).content = value
+                    }else{
+                        if(contentDetail[0].id == id){
+                            return false
+                        }
+                        const findIndex = findArr.findIndex((item:content)=>item.id === id)
+                        findArr.splice(findIndex,1)
+                        // console.log(findArr,editData)
+                        actions.editContentAsync({data:editData,callBack:()=>{
+                            if(findIndex){
+                                ContentEvent.getFocus(findArr[findIndex - 1].id)
+                            }
+                            
+                        }})
+                    }
+                    
+                },id)
+            }else{
+                 ContentEvent.reduceData(contentDetail,function(findArr:any){
+                    findArr.find((item:content)=>item.id === id).content = value
+                },id)
+            }
+           
         }
     }
     refreshRender = ()=>{
@@ -221,7 +247,9 @@ function mapDispatchProps (dispatch:Dispatch):object {
         actions:bindActionCreators(TodoAction,dispatch)
     }
 }
+
+const WrapHome = withRouter<thisProps>(Home as any)
 export default connect(
     mapStateToProps,
     mapDispatchProps
-)(Home)
+)(WrapHome)

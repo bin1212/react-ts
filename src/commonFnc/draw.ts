@@ -1,8 +1,8 @@
 import React, {PureComponent,Component} from 'react'
-// let canvas = document.getElementById('panorama') as HTMLCanvasElement;
-// let w = canvas.width;
-// let h = canvas.height;
-// let ctx:any = canvas.getContext('2d');
+import {goto} from './history'
+
+let isRunningX = false
+let animateFnc:any
 interface Iprops{
     canvas:HTMLCanvasElement,
     // color:string
@@ -15,7 +15,7 @@ interface layerProps{
     r:number;
     Radius:number;
     vpx:number;
-    vpy:number
+    vpy:number;
 }
 interface Istate{
     isRunning:boolean;LayerBallNum:number;LayerIntervalUp:number;canvas:HTMLCanvasElement;vpx:number;vpy:number;Radius:number;balls:any;angleX:number;angleY:number
@@ -23,7 +23,7 @@ interface Istate{
 
 class Wave {
     isRunning:boolean;LayerBallNum:number;LayerIntervalUp:number;canvas:HTMLCanvasElement;vpx:number;vpy:number;balls:any;angleX:number;angleY:number;
-    Radius:number;ctx:any;up:number;num:number;
+    Radius:number;ctx:any;up:number;num:number;initx:number;initMax:number;text:string;selectText:number;initY:number
     public constructor(props:Iprops) {    
         this.isRunning = false;
         this.LayerBallNum = 360 / 30 ;  //横向圆周个数
@@ -36,6 +36,11 @@ class Wave {
         this.angleX = Math.PI/100,
         this.angleY = Math.PI/100;
         this.ctx = this.canvas.getContext("2d"),
+        this.initx = 80,
+        this.initY = this.vpy-100
+        this.initMax = this.vpy+200,
+        this.text = 'JUST DO IT',
+        this.selectText = 0,
         // this.x = 0,
         // this.y = 0,
         this.num = 0,
@@ -43,14 +48,85 @@ class Wave {
         this.up = 0,
 
         this.init()
+
+        window.addEventListener("mousemove" , (event)=>{
+            if(isRunningX){
+                var x = event.clientX - this.canvas.offsetLeft - this.vpx;
+                var y = event.clientY - this.canvas.offsetTop - this.vpy;
+        
+                this.angleY = -x*0.0001;
+                this.angleX = -y*0.0001;
+            }
+            
+        });
+        this.canvas.addEventListener('click', function(e){
+            if(isRunningX){
+                goto('/')
+            }
+        }, false);
     }  
     init(){
-        let num = this.LayerIntervalUp / 2
-        for (var i = 0; i <=num; i++) {
-            this.draw(i,1)
-            this.draw(i,-1)
-        }
+        this.entry()
+        // let num = this.LayerIntervalUp / 2
+        // for (var i = 0; i <=num; i++) {
+        //     this.draw(i,1)
+        //     this.draw(i,-1)
+        // }
+        // this.start()
     }
+    entry(){
+        this.ctx.fillStyle = "#FFF";
+        this.ctx.font = "50px serif";
+        const drawText = this.text.slice(0,this.selectText)
+        if(this.selectText > this.text.length){
+           
+            this.clear()
+            let speed = 20;
+            this.ctx.fillStyle = "#FFF";
+            if(((this.initx < this.vpx) && (this.initY == this.vpy-100)) || (this.initY >=this.initMax)){
+                if(this.initx > this.canvas.width){
+                    //当just do it划出屏幕
+                    this.ctx.clearRect(0,0,this.canvas.width , this.canvas.height);
+                    let num = this.LayerIntervalUp / 2
+                    for (var i = 0; i <=num; i++) {
+                        this.draw(i,1)
+                        this.draw(i,-1)
+                    }
+                    this.start()
+                    this.canvas.style.cursor = 'pointer'
+                    return false
+                }else{
+                    this.initx += speed
+                    this.ctx.fillText(drawText,this.initx,this.initY);
+                }
+            }else{
+                this.initx = this.initx - speed
+                this.initY += speed
+                this.ctx.fillText(drawText,this.initx,this.initY);
+            }
+            
+            animateFnc = requestAnimationFrame(()=> {
+                this.entry()
+            })
+        }else{
+            this.ctx.fillText(drawText,80,this.initY);
+            this.selectText = this.selectText + 1
+            let timer = 100
+            if(this.selectText == (this.text.length+1)){
+                timer = 1000
+            }
+            animateFnc = requestAnimationFrame(()=> {
+                setTimeout(()=>{
+                    this.entry()
+                },timer)
+            })
+        }
+        
+    }
+    clear() {
+        this.ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+      }
     draw (i:number,up:number) {
         this.ctx.beginPath();
         let Lradius = Math.sqrt(Math.pow(this.Radius,2) - Math.pow(this.Radius * Math.cos(i * Math.PI * 2 / this.LayerBallNum), 2))
@@ -78,18 +154,15 @@ class Wave {
 
     }
     start(){
-        this.isRunning = true;
         this.animate();   
-    }
-    stop(){
-        this.isRunning = false;
     }
     animate(){
         this.ctx.clearRect(0,0,this.canvas.width , this.canvas.height);
-        this.rotateX();
-        this.rotateY();
         this.rotateZ();
-
+        if(isRunningX){
+            this.rotateX();
+            this.rotateY()
+        }
         for(var i=0;i<this.balls.length;i++){
             this.balls[i].paint();
         }
@@ -148,7 +221,7 @@ class Wave {
 
 class Ball {
     ctx:any;x:number;y:number;z:number;r:number;width:number;Radius:number;
-    vpx:number;vpy:number
+    vpx:number;vpy:number;initx:number;
     constructor(props:layerProps){
         this.ctx = props.ctx
         this.x = props.x;
@@ -156,9 +229,10 @@ class Ball {
         this.z = props.z;
         this.r = props.r;
         this.Radius = props.Radius;
-        this.vpx = props.Radius;
-        this.vpy = props.Radius;
+        this.vpx = props.vpx;
+        this.vpy = props.vpy;
         this.width = 2*this.r;
+        this.initx = 0;
     }
     paint(){
         let fl = 450 //焦距
@@ -166,7 +240,23 @@ class Ball {
         this.ctx.beginPath();
         var scale = fl / (fl - this.z);
         var alpha = (this.z+this.Radius)/(2*this.Radius);
-        this.ctx.arc(this.vpx + this.x, this.vpy + this.y, this.r*scale , 0 , 2*Math.PI , true);
+        if(this.initx < this.vpx){
+            this.ctx.arc(this.initx + this.x, this.vpy + this.y, this.r*scale , 0 , 2*Math.PI , true);
+            this.initx = this.initx + 10
+        }else{
+            isRunningX = true
+            this.ctx.font = "20px serif";
+            this.ctx.textAlign = "center";
+            // this.ctx.shadowBlur = 2;
+            // this.ctx.shadowOffsetX = 2;
+            // this.ctx.shadowOffsetY = 2;
+            // this.ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+            // this.ctx.strokeText("点击进入",this.initx-10,this.vpy+10);
+            this.ctx.fillText('点击进入',this.initx,this.vpy);
+            this.ctx.restore();
+            this.ctx.arc(this.vpx + this.x, this.vpy + this.y, this.r*scale , 0 , 2*Math.PI , true);
+        }
+        
         this.ctx.fillStyle = "rgba(255,255,255,"+(alpha+0.5)+")";
         // ctx.fillStyle = "#000";
         this.ctx.fill();
