@@ -83,6 +83,7 @@ class Login extends PureComponent<UserFormProps,Istate>{
     }
     render(){
         const {getFieldDecorator} = this.props.form;
+        //皖ICP备19012433号
         const {isLogin} = this.state
         const formItemLayout = {
             labelCol: { span: 6 },
@@ -139,6 +140,7 @@ class Login extends PureComponent<UserFormProps,Istate>{
                             </Col>
                         </Row>
                     </Form>
+                    <div className='beian'>备案号：<a href='http://www.beian.miit.gov.cn'>皖ICP备19012433号</a></div>
                 </div>
             </div>
         )

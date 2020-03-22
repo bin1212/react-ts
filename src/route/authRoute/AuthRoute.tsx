@@ -26,6 +26,7 @@ const AsyncNotFound = loadable({
 const authPath = [
     {path:'/content',component:AsyncHome,auth:true},
     {path:'/login',component:AsyncLogin,auth:false},
+    {path:'/index',component:AsyncIndex,auth:false},
 ]
 
 class AuthRoute extends Component{
@@ -36,11 +37,11 @@ class AuthRoute extends Component{
                    if(!item.auth){
                        return  <Route key={index} path={item.path} exact component={item.component}/>
                    }
-                //    else{
-                //        return (
-                //         <Route key={index} path={item.path} exact component={item.component}/>
-                //     )
-                //    }
+                   else{
+                       return (
+                        <Route key={index} path={item.path} exact component={item.component}/>
+                    )
+                   }
                })}
                {/* <Route path='/login' component={AsyncLogin}/> */}
                 <Route path='/test' component={AsyncTest}/>

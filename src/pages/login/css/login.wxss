@@ -1,0 +1,39 @@
+.login_container {
+  height: 100vh;
+  background: #343434;
+  display: flex;
+}
+.login_content {
+  width: 60%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 10px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.login_back {
+  height: 100%;
+  width: 40%;
+  background: url('../../../assets/images/login_left.jpg');
+}
+.login-form {
+  width: 100%;
+}
+.login-form .ant-row {
+  display: flex;
+  justify-content: center;
+}
+.goGegister {
+  color: deepskyblue;
+  cursor: pointer;
+}
+.goGegister:hover {
+  text-decoration: underline;
+}
+.beian {
+  position: absolute;
+  left: 30px;
+  bottom: 20px;
+}
