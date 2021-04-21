@@ -82,6 +82,7 @@ class Login extends PureComponent<UserFormProps,Istate>{
             })
     }
     render(){
+        console.log('jenkins')
         const {getFieldDecorator} = this.props.form;
         //皖ICP备19012433号
         const {isLogin} = this.state
